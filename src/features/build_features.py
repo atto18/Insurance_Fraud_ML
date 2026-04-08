@@ -162,6 +162,38 @@ def select_model_columns(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series, pd.
 
 
 # ------------------------------------------------------------------
+# Drop columns not needed in the feature file
+# ------------------------------------------------------------------
+
+def drop_metadata_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Remove columns that must not appear in provider_features.csv:
+
+    - Exclusion metadata: only populated for the 187 positive rows.
+      Keeping them would cause data leakage (model learns "non-empty
+      last_name = fraud" rather than any real billing pattern).
+    - Original categoricals: already encoded into 0/1 flag columns,
+      so the raw string versions are redundant.
+    - Raw address text: city is not used as a model feature.
+    """
+    cols_to_drop = [
+        # exclusion metadata (post-label, leaks the target)
+        "last_name", "first_name", "middle_name", "business_name",
+        "general_category", "specialty", "city_excl", "state_excl",
+        "exclusion_type", "exclusion_date", "reinstatement_date",
+        # raw categoricals replaced by encoded flags
+        "entity_type",
+        "medicare_participation",
+        "drug_suppression_indicator",
+        # raw address text
+        "city",
+    ]
+
+    existing = [c for c in cols_to_drop if c in df.columns]
+    return df.drop(columns=existing)
+
+
+# ------------------------------------------------------------------
 # Full pipeline
 # ------------------------------------------------------------------
 
@@ -186,9 +218,11 @@ def build_features(
     print("Computing specialty z-scores (this may take a moment)...")
     df = add_specialty_zscores(df)
 
+    print("Dropping metadata and redundant columns...")
+    df = drop_metadata_columns(df)
+
     print(f"Feature engineering complete. Final shape: {df.shape}")
-    print(f"  Total features (excl. id/label/metadata): "
-          f"{df.shape[1] - 1}")  # rough count
+    print(f"  Columns: {df.columns.tolist()}")
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(output_path, index=False)
