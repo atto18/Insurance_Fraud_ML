@@ -5,10 +5,7 @@ Imported by ``dashboard.py`` and ``dashboard_pro.py`` (no Streamlit layout at im
 
 from __future__ import annotations
 
-<<<<<<< HEAD
-=======
 import html
->>>>>>> Features
 import json
 import os
 import subprocess
@@ -31,12 +28,6 @@ PATH_METRICS_ITERATIVE = ROOT / "outputs" / "iterative" / "metrics.json"
 PATH_PLOT_PR_ORIGINAL = ROOT / "outputs" / "plots" / "pr_curves.png"
 PATH_PLOT_PK_ORIGINAL = ROOT / "outputs" / "plots" / "precision_at_k.png"
 PATH_PLOT_SCOREDIST_ORIGINAL = ROOT / "outputs" / "plots" / "score_distribution.png"
-<<<<<<< HEAD
-PATH_SHAP_BAR = ROOT / "outputs" / "plots" / "shap_lightgbm_bar.png"
-PATH_SHAP_BEESWARM = ROOT / "outputs" / "plots" / "shap_lightgbm_beeswarm.png"
-PATH_FEAT_IMP = ROOT / "outputs" / "plots" / "feature_importance.png"
-=======
->>>>>>> Features
 
 PATH_PLOT_PR_ITER = ROOT / "outputs" / "iterative" / "plots" / "pr_curve.png"
 PATH_PLOT_PK_ITER = ROOT / "outputs" / "iterative" / "plots" / "precision_at_k.png"
@@ -46,8 +37,6 @@ PATH_RAW_PROVIDER = ROOT / "data" / "raw" / "provider.csv"
 PATH_RAW_EXCLUSION = ROOT / "data" / "raw" / "exclusion.csv"
 PATH_PIPELINE_SCRIPT = ROOT / "src" / "pipeline" / "run_from_raw.py"
 
-<<<<<<< HEAD
-=======
 # Direct public file URLs (save into data/raw/ as `provider.csv` and `exclusion.csv`).
 # Update if CMS or OIG republish the files and these URLs 404.
 URL_CMS_RAW_PROVIDER = "https://data.cms.gov/sites/default/files/2025-04/22edfd1e-d17a-4478-ad6b-92cac2a5a3c4/MUP_PHY_R25_P05_V20_D23_Prov.csv"
@@ -154,7 +143,6 @@ def download_url_to_path(url: str, dest: Path) -> str:
         return f"{type(e).__name__}: {e}"
     return ""
 
->>>>>>> Features
 MODEL_ARTIFACTS = [
     ROOT / "models" / "lightgbm_model.joblib",
     ROOT / "models" / "xgboost_model.joblib",
@@ -262,10 +250,6 @@ def plot_score_deciles(scored: pd.DataFrame, title: str) -> go.Figure:
     return fig
 
 
-<<<<<<< HEAD
-def _metric_row_html(label: str, value: str, accent: str) -> str:
-    return f"""<div class="metric-card" style="--accent: {accent};">
-=======
 def _metric_row_html(
     label: str,
     value: str,
@@ -276,7 +260,6 @@ def _metric_row_html(
     # Second row: extra top margin so the gap between the two KPI lines is clear and consistent
     margin = "1rem 0.6rem 0.35rem 0.6rem" if second_row else "0.35rem 0.6rem"
     return f"""<div class="metric-card" style="--accent: {accent}; margin: {margin}; box-sizing: border-box;">
->>>>>>> Features
         <div class="label">{label}</div>
         <div class="value">{value}</div>
     </div>"""
@@ -289,10 +272,6 @@ def safe_image(path: Path, caption: str | None = None) -> None:
         st.warning(f"Missing plot: `{path.relative_to(ROOT)}`")
 
 
-<<<<<<< HEAD
-def top_one_pct_count(n: int) -> int:
-    return max(1, int(np.ceil(n * 0.01)))
-=======
 _COMPARE_CANVAS_W = 900
 _COMPARE_CANVAS_H = 500
 
@@ -331,7 +310,6 @@ def safe_image_compare(path: Path, caption: str | None = None) -> None:
         st.image(canvas, caption=caption, use_container_width=True)
     except Exception:
         st.image(str(path), caption=caption, use_container_width=True)
->>>>>>> Features
 
 
 def ensemble_auroc(metrics: dict[str, Any], name: str) -> float | None:
@@ -342,8 +320,6 @@ def ensemble_auroc(metrics: dict[str, Any], name: str) -> float | None:
     return None
 
 
-<<<<<<< HEAD
-=======
 def ensemble_auprc(metrics: dict[str, Any], name: str) -> float | None:
     rows = metrics.get("test_metrics") or []
     for row in rows:
@@ -352,7 +328,6 @@ def ensemble_auprc(metrics: dict[str, Any], name: str) -> float | None:
     return None
 
 
->>>>>>> Features
 def build_metrics_table(metrics: dict[str, Any]) -> pd.DataFrame | None:
     rows = metrics.get("test_metrics")
     if not rows:
@@ -382,8 +357,6 @@ def build_metrics_table(metrics: dict[str, Any]) -> pd.DataFrame | None:
     return df[cols]
 
 
-<<<<<<< HEAD
-=======
 def _hp_format_value(v: Any) -> str:
     if v is None:
         return "—"
@@ -600,7 +573,6 @@ def render_hyperparams_panel(metrics: dict[str, Any], *, mode: str) -> None:
                 )
 
 
->>>>>>> Features
 def style_metrics_with_bars(table: pd.DataFrame, *, auroc_color: str = "#89b4fa", auprc_color: str = "#f9e2af") -> Any:
     fmt = {c: "{:.4f}" for c in ["AUROC", "AUPRC", "P@50", "P@100", "P@200", "P@500"] if c in table.columns}
     styler = table.style.format(fmt, na_rep="—")
@@ -692,23 +664,6 @@ def download_button(rel_path: str, help_text: str, *, key_prefix: str = "dl") ->
     )
 
 
-<<<<<<< HEAD
-def render_kpi_row(scored: pd.DataFrame, auroc: float | None) -> None:
-    total = len(scored)
-    confirmed = int(scored["label"].sum())
-    flagged = top_one_pct_count(total)
-    auroc_s = f"{auroc:.3f}" if auroc is not None and not np.isnan(auroc) else "—"
-
-    c1, c2, c3, c4 = st.columns(4)
-    with c1:
-        st.markdown(_metric_row_html("Total providers", f"{total:,}", "#89b4fa"), unsafe_allow_html=True)
-    with c2:
-        st.markdown(_metric_row_html("Confirmed fraudsters", f"{confirmed:,}", "#f38ba8"), unsafe_allow_html=True)
-    with c3:
-        st.markdown(_metric_row_html("High-risk flagged (top 1%)", f"{flagged:,}", "#fab387"), unsafe_allow_html=True)
-    with c4:
-        st.markdown(_metric_row_html("AUROC (held-out test)", auroc_s, "#a6e3a1"), unsafe_allow_html=True)
-=======
 def main_section_title_html(
     text: str, variant: str = "kpi", *, extra_class: str = ""
 ) -> str:
@@ -776,7 +731,6 @@ def render_kpi_row(
         st.markdown(
             _metric_row_html("AUPRC (held-out test)", auprc_s, "#f9e2af", second_row=True), unsafe_allow_html=True
         )
->>>>>>> Features
 
 
 def render_original_tabs(
@@ -791,21 +745,6 @@ def render_original_tabs(
     style_table = style_table or (lambda t: style_metrics_with_bars(t))
     hist_plot_kwargs = hist_plot_kwargs or {}
     auroc = ensemble_auroc(metrics, "Ensemble")
-<<<<<<< HEAD
-    t_overview, t_perf, t_top, t_dist, t_shap = st.tabs(
-        ["Overview KPIs", "Model Performance", "Top Suspicious Providers", "Score Distribution", "SHAP & Feature Importance"]
-    )
-
-    with t_overview:
-        render_kpi_row(scored, auroc)
-        st.markdown(
-            "Rank-normalized weighted ensemble of **Logistic Regression**, **LightGBM**, **XGBoost**, and **CatBoost** "
-            "(Optuna-tuned). Trained on ~1.26M Medicare providers with **187** OIG-confirmed fraud labels — extreme class imbalance."
-        )
-
-    with t_perf:
-        st.subheader("Test-set metrics")
-=======
     auprc = ensemble_auprc(metrics, "Ensemble")
     t_overview, t_perf, t_top, t_dist = st.tabs(
         [
@@ -834,22 +773,11 @@ def render_original_tabs(
 
     with t_perf:
         st.markdown(main_section_title_html("Test-set metrics", "table"), unsafe_allow_html=True)
->>>>>>> Features
         table = build_metrics_table(metrics)
         if table is not None:
             st.dataframe(style_table(table), width="stretch", hide_index=True)
         else:
             st.warning("`outputs/metrics.json` not found or empty.")
-<<<<<<< HEAD
-
-        c1, c2 = st.columns(2)
-        with c1:
-            safe_image(PATH_PLOT_PR_ORIGINAL, "PR curves — base models + ensemble")
-        with c2:
-            safe_image(PATH_PLOT_PK_ORIGINAL, "Precision@K — original models")
-
-    with t_top:
-=======
         render_hyperparams_panel(metrics, mode="original")
         st.markdown(
             main_section_title_html("PR curves & precision@K (training outputs)", "chart"),
@@ -865,7 +793,6 @@ def render_original_tabs(
         st.markdown(
             main_section_title_html("Top suspicious providers", "table"), unsafe_allow_html=True
         )
->>>>>>> Features
         st.caption("Sort columns by clicking headers. Confirmed fraud rows are highlighted.")
         df = scored.sort_values("fraud_score", ascending=False)
         if fraud_only:
@@ -907,23 +834,6 @@ def render_original_tabs(
         st.dataframe(show.style.apply(highlight, axis=1), width="stretch", height=520)
 
     with t_dist:
-<<<<<<< HEAD
-        c1, c2 = st.columns([1, 1])
-        with c1:
-            safe_image(PATH_PLOT_SCOREDIST_ORIGINAL, "Static score distribution (original ensemble)")
-        with c2:
-            fig = plot_score_histogram(scored, "Interactive: fraud vs non-fraud (original scores)", **hist_plot_kwargs)
-            st.plotly_chart(fig, width="stretch")
-
-    with t_shap:
-        c1, c2 = st.columns(2)
-        with c1:
-            safe_image(PATH_SHAP_BAR, "SHAP bar — LightGBM")
-        with c2:
-            safe_image(PATH_SHAP_BEESWARM, "SHAP beeswarm — LightGBM")
-        safe_image(PATH_FEAT_IMP, "Permutation / model feature importance")
-
-=======
         st.markdown(main_section_title_html("Score distribution", "chart"), unsafe_allow_html=True)
         c1, c2 = st.columns([1, 1])
         with c1:
@@ -934,7 +844,6 @@ def render_original_tabs(
             fig = plot_score_histogram(scored, "Interactive: fraud vs non-fraud (original scores)", **hist_plot_kwargs)
             st.plotly_chart(fig, width="stretch")
 
->>>>>>> Features
 
 def render_iterative_tabs(
     scored: pd.DataFrame,
@@ -948,35 +857,6 @@ def render_iterative_tabs(
     style_table = style_table or (lambda t: style_metrics_with_bars(t))
     hist_plot_kwargs = hist_plot_kwargs or {}
     auroc = ensemble_auroc(metrics, "IterativeEnsemble")
-<<<<<<< HEAD
-    st.markdown(
-        """
-In each of **100** iterations, we sample **200** negatives plus **all 187** positives, train **LightGBM** and **XGBoost**
-on this balanced batch, then **average** predictions across iterations. Hyperparameters are tuned with **Optuna** on a
-held-out validation slice, and metrics below are on the same held-out **test** set as the original pipeline.
-"""
-    )
-    cfg = metrics.get("config") or {}
-    if cfg:
-        st.info(
-            f"**Config:** `n_iterations={cfg.get('n_iterations')}`, `n_negatives_per_iter={cfg.get('n_negatives_per_iter')}`, "
-            f"`base_learners={cfg.get('base_learners')}`"
-        )
-    best = metrics.get("best_params") or {}
-    if best:
-        with st.expander("Best Optuna parameters (LightGBM & XGBoost)"):
-            st.json(best)
-
-    t_overview, t_perf, t_top, t_dist, t_shap = st.tabs(
-        ["Overview KPIs", "Model Performance", "Top Suspicious Providers", "Score Distribution", "SHAP & Feature Importance"]
-    )
-
-    with t_overview:
-        render_kpi_row(scored, auroc)
-
-    with t_perf:
-        st.subheader("Test-set metrics")
-=======
     auprc = ensemble_auprc(metrics, "IterativeEnsemble")
 
     t_overview, t_perf, t_top, t_dist = st.tabs(
@@ -1006,21 +886,11 @@ held-out validation slice, and metrics below are on the same held-out **test** s
 
     with t_perf:
         st.markdown(main_section_title_html("Test-set metrics", "table"), unsafe_allow_html=True)
->>>>>>> Features
         table = build_metrics_table(metrics)
         if table is not None:
             st.dataframe(style_table(table), width="stretch", hide_index=True)
         else:
             st.warning("`outputs/iterative/metrics.json` not found or empty.")
-<<<<<<< HEAD
-        c1, c2 = st.columns(2)
-        with c1:
-            safe_image(PATH_PLOT_PR_ITER, "PR curve — iterative ensemble")
-        with c2:
-            safe_image(PATH_PLOT_PK_ITER, "Precision@K — iterative")
-
-    with t_top:
-=======
         render_hyperparams_panel(metrics, mode="iterative")
         st.markdown(
             main_section_title_html("PR curve & precision@K (training outputs)", "chart"),
@@ -1036,7 +906,6 @@ held-out validation slice, and metrics below are on the same held-out **test** s
         st.markdown(
             main_section_title_html("Top suspicious providers", "table"), unsafe_allow_html=True
         )
->>>>>>> Features
         st.caption("Sort columns by clicking headers. Confirmed fraud rows are highlighted.")
         df = scored.sort_values("fraud_score", ascending=False)
         if fraud_only:
@@ -1056,27 +925,6 @@ held-out validation slice, and metrics below are on the same held-out **test** s
         st.dataframe(show.style.apply(highlight_iter, axis=1), width="stretch", height=520)
 
     with t_dist:
-<<<<<<< HEAD
-        c1, c2 = st.columns(2)
-        with c1:
-            safe_image(PATH_PLOT_SCOREDIST_ITER, "Static score distribution (iterative)")
-        with c2:
-            fig = plot_score_histogram(scored, "Interactive: fraud vs non-fraud (iterative scores)", **hist_plot_kwargs)
-            st.plotly_chart(fig, width="stretch")
-
-    with t_shap:
-        st.caption(
-            "Iterative training did not emit separate SHAP figures. The plots below are from the **original** LightGBM-focused "
-            "interpretability run on the same engineered feature space."
-        )
-        c1, c2 = st.columns(2)
-        with c1:
-            safe_image(PATH_SHAP_BAR, "SHAP bar — LightGBM (original pipeline)")
-        with c2:
-            safe_image(PATH_SHAP_BEESWARM, "SHAP beeswarm — LightGBM (original pipeline)")
-        safe_image(PATH_FEAT_IMP, "Feature importance (original pipeline)")
-
-=======
         st.markdown(main_section_title_html("Score distribution", "chart"), unsafe_allow_html=True)
         c1, c2 = st.columns(2)
         with c1:
@@ -1087,7 +935,6 @@ held-out validation slice, and metrics below are on the same held-out **test** s
             fig = plot_score_histogram(scored, "Interactive: fraud vs non-fraud (iterative scores)", **hist_plot_kwargs)
             st.plotly_chart(fig, width="stretch")
 
->>>>>>> Features
 
 def render_compare_view(m_orig: dict[str, Any], m_iter: dict[str, Any]) -> None:
     def row_for(model_name: str, m: dict[str, Any]) -> dict[str, float] | None:
@@ -1142,46 +989,13 @@ def render_compare_view(m_orig: dict[str, Any], m_iter: dict[str, Any]) -> None:
                 styles.append("")
         return styles
 
-<<<<<<< HEAD
-    st.subheader("Metric comparison (test set)")
-=======
     st.markdown(main_section_title_html("Metric comparison (test set)", "table"), unsafe_allow_html=True)
->>>>>>> Features
     st.dataframe(
         cmp_df.style.format(fmt, na_rep="—").apply(color_winner, subset=["Winner"]),
         width="stretch",
         hide_index=True,
     )
 
-<<<<<<< HEAD
-    st.subheader("PR curves")
-    c1, c2 = st.columns(2)
-    with c1:
-        safe_image(PATH_PLOT_PR_ORIGINAL, "Original — all models + ensemble")
-    with c2:
-        safe_image(PATH_PLOT_PR_ITER, "Iterative ensemble")
-
-    st.subheader("Score distributions")
-    c1, c2 = st.columns(2)
-    with c1:
-        safe_image(PATH_PLOT_SCOREDIST_ORIGINAL, "Original ensemble")
-    with c2:
-        safe_image(PATH_PLOT_SCOREDIST_ITER, "Iterative ensemble")
-
-    st.subheader("Precision@K")
-    c1, c2 = st.columns(2)
-    with c1:
-        safe_image(PATH_PLOT_PK_ORIGINAL, "Original models")
-    with c2:
-        safe_image(PATH_PLOT_PK_ITER, "Iterative")
-
-    st.markdown("### Conclusion")
-    st.info(
-        "The iterative approach achieves better AUROC (0.812 vs 0.790), meaning better overall ranking quality. "
-        "The original ensemble achieves better AUPRC (0.0105 vs 0.0013), meaning better precision at high-confidence "
-        "thresholds. With only 37 confirmed fraudsters in the test set, both metrics carry high statistical noise."
-    )
-=======
     st.markdown(main_section_title_html("PR curves", "chart"), unsafe_allow_html=True)
     c1, c2 = st.columns(2)
     with c1:
@@ -1202,4 +1016,3 @@ def render_compare_view(m_orig: dict[str, Any], m_iter: dict[str, Any]) -> None:
         safe_image_compare(PATH_PLOT_PK_ORIGINAL, "Original models")
     with c2:
         safe_image_compare(PATH_PLOT_PK_ITER, "Iterative")
->>>>>>> Features
