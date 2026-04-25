@@ -1,0 +1,25 @@
+venv/
+.venv/
+.git/
+.claude/
+.idea/
+.vscode/
+
+# Large data files — user uploads at runtime
+data/
+
+# Training-only files
+requirements-train.txt
+catboost_info/
+xgboost/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Misc
+*.exe
+*.pdf
+.env
+.DS_Store
