@@ -1,4 +1,38 @@
+# ── Data (large / sensitive — user supplies at runtime) ───────────────────────
 data/
+
+# ── Python ─────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# ── Training artifacts ─────────────────────────────────────────────────────────
+catboost_info/
+
+# ── Large binaries / cloned libraries ─────────────────────────────────────────
+*.exe
+xgboost/
+
+# ── Notebooks ─────────────────────────────────────────────────────────────────
 notebooks/
 
+# ── Editor / tool config ───────────────────────────────────────────────────────
+.claude/
+.idea/
+.vscode/
+.DS_Store
+
+# ── Virtual environment ────────────────────────────────────────────────────────
+venv/
+.venv/
+
+# ── Secrets ───────────────────────────────────────────────────────────────────
+.env
+*.env
+
+# ── Project-specific docs (not part of the code deliverable) ──────────────────
 InsuranceFraud.pdf

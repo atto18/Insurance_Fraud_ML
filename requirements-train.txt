@@ -1,0 +1,14 @@
+# Full training pipeline dependencies (superset of requirements.txt)
+-r requirements.txt
+
+# ── Hyperparameter tuning ──────────────────────────────────────────────────────
+optuna>=3.5
+
+# ── Explainability ─────────────────────────────────────────────────────────────
+shap>=0.44
+
+# ── GPU logistic regression ────────────────────────────────────────────────────
+torch>=2.1
+
+# ── Plots (training only) ──────────────────────────────────────────────────────
+matplotlib>=3.7
