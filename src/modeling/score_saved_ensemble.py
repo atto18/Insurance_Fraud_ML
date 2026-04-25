@@ -80,7 +80,7 @@ def load_lr_bundle(model_dir: Path):
     import __main__
     import torch
 
-    from src.modeling.train_models import _GPULogisticRegression
+    from src.modeling.lr_model import _GPULogisticRegression
 
     __main__._GPULogisticRegression = _GPULogisticRegression
 
