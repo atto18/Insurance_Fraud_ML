@@ -1,0 +1,55 @@
+{
+  "test_metrics": [
+    {
+      "model": "IterativeEnsemble",
+      "auroc": 0.812409,
+      "auprc": 0.001327,
+      "n_pos": 37,
+      "n": 251869,
+      "p@50": 0.0,
+      "r@50": 0.0,
+      "p@100": 0.0,
+      "r@100": 0.0,
+      "p@200": 0.005,
+      "r@200": 0.027,
+      "p@500": 0.004,
+      "r@500": 0.0541
+    }
+  ],
+  "config": {
+    "n_iterations": 100,
+    "n_negatives_per_iter": 200,
+    "random_state": 42,
+    "test_size": 0.2,
+    "base_learners": [
+      "LightGBM",
+      "XGBoost"
+    ],
+    "n_trials_lgb": 25,
+    "n_trials_xgb": 25
+  },
+  "best_params": {
+    "lightgbm": {
+      "num_leaves": 28,
+      "learning_rate": 0.17254716573280354,
+      "n_estimators": 393,
+      "min_child_samples": 13,
+      "feature_fraction": 0.5780093202212182,
+      "reg_lambda": 1.6443457513284063
+    },
+    "xgboost": {
+      "n_estimators": 482,
+      "max_depth": 5,
+      "learning_rate": 0.13347908492973548,
+      "subsample": 0.836088639738088,
+      "colsample_bytree": 0.8143928979410806,
+      "reg_alpha": 0.010454027766056499,
+      "reg_lambda": 2.075110616204156,
+      "min_child_weight": 3
+    }
+  },
+  "ensemble_threshold": {
+    "value": 0.9147513234763425,
+    "note": "99th-percentile of iterative ensemble score on test set"
+  }
+}
