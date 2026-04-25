@@ -78,10 +78,21 @@ def encode_for_xgb(X: pd.DataFrame, encoders: dict[str, LabelEncoder]) -> pd.Dat
 def load_lr_bundle(model_dir: Path):
     """Joblib was saved when train_models ran as __main__; patch unpickler."""
     import __main__
+    import torch
 
     from src.modeling.train_models import _GPULogisticRegression
 
     __main__._GPULogisticRegression = _GPULogisticRegression
+
+    # Model may have been saved on GPU; remap tensors to CPU if CUDA unavailable
+    if not torch.cuda.is_available():
+        _orig = torch.load
+        torch.load = lambda *a, **kw: _orig(*a, **{**kw, "map_location": "cpu"})
+        try:
+            return joblib.load(model_dir / "logistic_regression.joblib")
+        finally:
+            torch.load = _orig
+
     return joblib.load(model_dir / "logistic_regression.joblib")
 
 
