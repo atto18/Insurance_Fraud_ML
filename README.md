@@ -157,7 +157,7 @@ The Docker image bundles the pre-trained models and pre-computed scores, and ser
 
 **Option 1 - Pull from Docker Hub** (recommended):
 
-The image is available on [Docker Hub](https://hub.docker.com/repository/docker/marcg7/ml-insurance-fraud/general).
+The image is available on [Docker Hub](https://hub.docker.com/r/marcg7/ml-insurance-fraud).
 
 ```bash
 docker pull marcg7/ml-insurance-fraud:latest
