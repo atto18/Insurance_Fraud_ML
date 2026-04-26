@@ -1,6 +1,13 @@
-# Medicare Provider Fraud Detection — ML Project
+# Medicare Provider Fraud Detection - ML Project
 
-**ESIB — USJ | 4th Year | Machine Learning**
+- ABOU ZEID Ahmad - 232350
+- GERGES Marc - 231303
+- HADDAD Jana (El) - 230564
+- NADER Clara - 230779
+
+**ESIB - USJ | Machine Learning Course**
+
+*Supervised by: Dr. Maroun AYLI*
 
 ---
 
@@ -37,16 +44,16 @@ Raw Data → Preprocessing → Labeling → Feature Engineering → Model Traini
 
 We created **57 features** to capture abnormal behavior, including:
 
-- **Financial ratios** — charge-to-allowed, payment ratios
-- **Utilization metrics** — services per beneficiary
-- **Specialty-based comparisons** — z-scores within each specialty
-- **Anomaly scores** — Isolation Forest / unusual behavior signals
+- **Financial ratios** - charge-to-allowed, payment ratios
+- **Utilization metrics** - services per beneficiary
+- **Specialty-based comparisons** - z-scores within each specialty
+- **Anomaly scores** - Isolation Forest / unusual behavior signals
 
 ---
 
 ## Modeling Approaches
 
-### Method 1 — Standard Training (Full Dataset)
+### Method 1 - Standard Training (Full Dataset)
 
 - **Models:** Logistic Regression, LightGBM, XGBoost, CatBoost
 - Class imbalance handled using weights
@@ -60,18 +67,18 @@ We created **57 features** to capture abnormal behavior, including:
 | Tree depth | 3–5 |
 | n_estimators | ~250–480 |
 | Regularization | reg_alpha, reg_lambda |
-| Subsample & feature sampling | — |
+| Subsample & feature sampling | - |
 | scale_pos_weight | ≈ 6715 (XGBoost) |
 
 ---
 
-### Method 2 — Iterative Training (Balanced Sampling)
+### Method 2 - Iterative Training (Balanced Sampling)
 
 - **Models:** LightGBM, XGBoost
 - Each iteration uses:
   - All 187 fraud cases
   - 200 randomly sampled non-fraud cases
-- 100 iterations total — final prediction = average of all iterations
+- 100 iterations total - final prediction = average of all iterations
 
 **Training settings:**
 
@@ -87,7 +94,7 @@ We created **57 features** to capture abnormal behavior, including:
 
 ## Results
 
-### Method 1 — Standard Training (Full Dataset)
+### Method 1 - Standard Training (Full Dataset)
 
 | Model | AUROC | AUPRC |
 |---|---|---|
@@ -97,7 +104,7 @@ We created **57 features** to capture abnormal behavior, including:
 | CatBoost | 0.797 | 0.0018 |
 | **Ensemble (Final)** | **0.795** | **0.0148** |
 
-### Method 2 — Iterative Training (Balanced Sampling)
+### Method 2 - Iterative Training (Balanced Sampling)
 
 | Model | AUROC | AUPRC |
 |---|---|---|
@@ -140,15 +147,15 @@ streamlit run dashboard.py
 
 ## Output
 
-**`data/final/scored_providers.csv`** — Contains fraud risk scores for all providers.
+**`data/final/scored_providers.csv`** - Contains fraud risk scores for all providers.
 
 ---
 
 ## Docker
 
-The Docker image bundles the pre-trained models and pre-computed scores, and serves the Streamlit dashboard. The training pipeline is **not** included — the image is dashboard-only. Raw data files are excluded from the image and can be uploaded at runtime via the dashboard sidebar.
+The Docker image bundles the pre-trained models and pre-computed scores, and serves the Streamlit dashboard. The training pipeline is **not** included - the image is dashboard-only. Raw data files are excluded from the image and can be uploaded at runtime via the dashboard sidebar.
 
-**Option 1 — Pull from Docker Hub** (recommended):
+**Option 1 - Pull from Docker Hub** (recommended):
 
 The image is available on [Docker Hub](https://hub.docker.com/repository/docker/marcg7/ml-insurance-fraud/general).
 
@@ -157,7 +164,7 @@ docker pull marcg7/ml-insurance-fraud:latest
 docker run -p 8501:8501 marcg7/ml-insurance-fraud:latest
 ```
 
-**Option 2 — Build locally:**
+**Option 2 - Build locally:**
 
 ```bash
 docker build -t marcg7/ml-insurance-fraud:latest .
