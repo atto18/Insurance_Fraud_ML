@@ -7,6 +7,8 @@ venv/
 
 # Large data files — user uploads at runtime
 data/
+# Exception: pre-computed iterative scores (no saved model to re-score from)
+!data/final/scored_providers_iterative.csv
 
 # Training-only files
 requirements-train.txt

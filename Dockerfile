@@ -14,8 +14,12 @@ COPY src/ ./src/
 COPY dashboard.py dashboard_core.py dashboard_pro.py ./
 COPY models/ ./models/
 COPY outputs/ ./outputs/
+COPY .streamlit/ ./.streamlit/
 
-# Create data directories (user uploads raw data at runtime via the sidebar)
+# Pre-computed iterative ensemble scores (no saved model artifacts to re-score from)
+COPY data/final/scored_providers_iterative.csv ./data/final/
+
+# Create remaining data directories (user uploads raw data at runtime via the sidebar)
 RUN mkdir -p data/raw data/preprocessed data/final
 
 EXPOSE 8501

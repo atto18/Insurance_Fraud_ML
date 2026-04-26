@@ -169,12 +169,15 @@ def main() -> None:
     gen_orig_score_dist(y_orig, scores_dict)
 
     print("\n== Iterative ensemble ==")
-    df_iter = pd.read_csv(iter_csv)
-    y_iter = df_iter["label"].to_numpy()
-    scores_iter = df_iter["fraud_score"].to_numpy()
-    gen_iter_pr_curve(y_iter, scores_iter)
-    gen_iter_precision_at_k(y_iter, scores_iter)
-    gen_iter_score_dist(y_iter, scores_iter)
+    if not iter_csv.exists():
+        print("  Skipping — scored_providers_iterative.csv not found.")
+    else:
+        df_iter = pd.read_csv(iter_csv)
+        y_iter = df_iter["label"].to_numpy()
+        scores_iter = df_iter["fraud_score"].to_numpy()
+        gen_iter_pr_curve(y_iter, scores_iter)
+        gen_iter_precision_at_k(y_iter, scores_iter)
+        gen_iter_score_dist(y_iter, scores_iter)
 
     print("\nDone.")
 
