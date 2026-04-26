@@ -2,7 +2,10 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install dependencies first (cached layer)
+# Install CPU-only torch first (separate cached layer — avoids the 2.5 GB CUDA wheel)
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+
+# Install remaining dependencies (torch already satisfied, so pip skips it)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
